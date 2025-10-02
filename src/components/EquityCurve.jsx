@@ -1,20 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, ComposedChart, ReferenceLine } from 'recharts';
 import { format } from 'date-fns';
 
 const EquityCurve = ({ equityData, drawdownData }) => {
     const [dateRange, setDateRange] = useState({
-        from: equityData[0]?.date,
-        to: equityData[equityData.length - 1]?.date
+        from: equityData[0]?.date || new Date(),
+        to: equityData[equityData.length - 1]?.date || new Date()
     });
 
-    const filteredData = equityData.map((item, index) => ({
-        date: item.date.getTime(),
-        equity: item.value,
-        nifty: item.value * 0.85, // Mock NIFTY50 data
-        drawdown: drawdownData[index]?.drawdown || 0,
-        dateLabel: format(item.date, 'yyyy-MM-dd')
-    }));
+    // Filter data based on date range
+    const filteredData = equityData
+        .map((item, index) => ({
+            date: item.date.getTime(),
+            equity: item.value,
+            nifty: item.value * 0.85, // Mock NIFTY50 data
+            drawdown: drawdownData[index]?.drawdown || 0,
+            dateLabel: format(item.date, 'yyyy-MM-dd')
+        }))
+        .filter(item => item.date >= dateRange.from.getTime() && item.date <= dateRange.to.getTime());
 
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
@@ -35,13 +38,26 @@ const EquityCurve = ({ equityData, drawdownData }) => {
         return null;
     };
 
+    // Reset date range to default
+    const handleReset = () => {
+        setDateRange({
+            from: equityData[0]?.date || new Date(),
+            to: equityData[equityData.length - 1]?.date || new Date()
+        });
+    };
+
     return (
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
             <div className="flex justify-between items-center p-6 border-b border-gray-200">
                 <div>
                     <h2 className="text-xl font-semibold text-gray-900">Equity curve</h2>
                     <p className="text-sm text-gray-500 mt-1">Live since 2019-01-01
-                        <button className="ml-2 text-teal-600 hover:text-teal-700 text-xs">↻ Reset</button>
+                        <button
+                            className="ml-2 text-teal-600 hover:text-teal-700 text-xs"
+                            onClick={handleReset}
+                        >
+                            ↻ Reset
+                        </button>
                     </p>
                 </div>
                 <div className="flex space-x-4 text-sm">
@@ -88,24 +104,21 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                             yAxisId="left"
                             stroke="#999"
                             tick={{ fontSize: 12 }}
-                            domain={[-100, 600]} // Adjusted to match the range of ticks
-                            ticks={[-100, -50, -20, 0, 50, 100, 200, 300, 400, 550]} // Custom ticks as requested
+                            domain={[-100, 400]}
+                            ticks={[-100, -50, -20, 0, 50, 100, 150, 250, 400]}
                         />
                         <Tooltip content={<CustomTooltip />} />
 
-                        {/* Horizontal reference lines for each tick */}
                         <ReferenceLine y={-100} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={-50} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={-20} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={0} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={50} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={100} stroke="#000" strokeDasharray="3 3" isFront={false} />
-                        <ReferenceLine y={200} stroke="#000" strokeDasharray="3 3" isFront={false} />
-                        <ReferenceLine y={300} stroke="#000" strokeDasharray="3 3" isFront={false} />
+                        <ReferenceLine y={150} stroke="#000" strokeDasharray="3 3" isFront={false} />
+                        <ReferenceLine y={250} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={400} stroke="#000" strokeDasharray="3 3" isFront={false} />
-                        <ReferenceLine y={550} stroke="#000" strokeDasharray="3 3" isFront={false} />
 
-                        {/* Drawdown Area first (at bottom), starting from 0 */}
                         <Area
                             yAxisId="left"
                             type="monotone"
@@ -116,8 +129,6 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                             fillOpacity={1}
                             baseValue={0}
                         />
-
-                        {/* Equity Lines last (on top) */}
                         <Line
                             yAxisId="left"
                             type="monotone"
