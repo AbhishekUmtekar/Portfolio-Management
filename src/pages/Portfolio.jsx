@@ -54,26 +54,28 @@ const Portfolio = () => {
         console.log('Output from parseNavData:', result);
         return result;
     }, [navData]);
+
     const trailingReturns = useMemo(() => {
         console.log('Input to calculateTrailingReturns:', processedData);
         return calculateTrailingReturns(processedData);
     }, [processedData]);
+
     const equityCurve = useMemo(() => calculateEquityCurve(processedData), [processedData]);
     const drawdownData = useMemo(() => calculateDrawdown(processedData), [processedData]);
 
     if (error) {
-        return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-red-600">{error}</div>;
+        return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 text-red-600">{error}</div>;
     }
 
     if (!navData.length) {
-        return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">Loading NAV data from Excel...</div>;
+        return <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">Loading NAV data from Excel...</div>;
     }
 
     return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 mb-2">Portfolio Statistics</h1>
-                <p className="text-gray-600">Quant Active Fund - Performance Analysis (Loaded from Excel)</p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+            <div className="mb-6 sm:mb-8">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Portfolio Statistics</h1>
+                <p className="text-sm sm:text-base text-gray-600">Quant Active Fund - Performance Analysis (Loaded from Excel)</p>
             </div>
 
             <TrailingReturns returns={trailingReturns} />

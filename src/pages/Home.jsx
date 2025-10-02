@@ -42,16 +42,16 @@ const Home = () => {
     ];
 
     return (
-        <div className="max-w-7xl mx-auto px-8 py-8">
-            <div className="mb-8">
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">Home</h1>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
+            <div className="mb-6 sm:mb-8">
+                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Home</h1>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
+                <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start mb-3">
-                        <h3 className="font-semibold text-gray-900 text-lg">Get started</h3>
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <h3 className="font-semibold text-gray-900 text-base sm:text-lg">Get started</h3>
+                        <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                     </div>
@@ -60,10 +60,10 @@ const Home = () => {
                     </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start mb-3">
-                        <h3 className="font-semibold text-gray-900 text-lg">Community</h3>
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <h3 className="font-semibold text-gray-900 text-base sm:text-lg">Community</h3>
+                        <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                     </div>
@@ -72,11 +72,11 @@ const Home = () => {
                     </p>
                 </div>
 
-                <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 hover:shadow-md transition-shadow sm:col-span-2 lg:col-span-1">
                     <div className="flex justify-between items-start mb-3">
-                        <h3 className="font-semibold text-gray-900 text-lg">Visit website</h3>
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        <h3 className="font-semibold text-gray-900 text-base sm:text-lg">Visit website</h3>
+                        <svg className="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                     </div>
                     <p className="text-sm text-gray-600">
@@ -86,8 +86,8 @@ const Home = () => {
             </div>
 
             <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">Latest Posts</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Latest Posts</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     {blogs.map(blog => (
                         <BlogCard key={blog.id} {...blog} />
                     ))}

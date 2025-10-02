@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
     const location = useLocation();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const isActive = (path) => location.pathname === path;
 
@@ -72,51 +73,94 @@ const Sidebar = () => {
         }
     ];
 
+    const handleLinkClick = () => {
+        setIsMobileMenuOpen(false);
+    };
+
     return (
-        <div className="w-52 bg-white border-r border-gray-200 min-h-screen fixed left-0 top-0">
-            {/* Logo */}
-            <div className="p-6 border-b border-gray-200">
-                <h1 className="text-xl font-bold">
-                    <span className="text-teal-600">capital</span>
-                    <span className="text-gray-900">mind</span>
-                </h1>
-                <span className="inline-block mt-1 px-2 py-0.5 bg-gray-900 text-white text-xs font-semibold rounded">
-                    premium
-                </span>
+        <>
+            {/* Mobile Header */}
+            <div className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
+                <div className="flex items-center justify-between p-4">
+                    <h1 className="text-xl font-bold">
+                        <span className="text-teal-600">capital</span>
+                        <span className="text-gray-900">mind</span>
+                    </h1>
+                    <button
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        className="p-2 rounded-md hover:bg-gray-100"
+                        aria-label="Toggle menu"
+                    >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            {isMobileMenuOpen ? (
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            ) : (
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                            )}
+                        </svg>
+                    </button>
+                </div>
             </div>
 
-            {/* Navigation */}
-            <nav className="py-4">
-                {menuItems.map((item) => (
-                    <Link
-                        key={item.path}
-                        to={item.path}
-                        className={`flex items-center space-x-3 px-6 py-3 text-sm font-medium transition-colors ${isActive(item.path)
-                            ? 'bg-gray-100 text-gray-900 border-r-2 border-teal-600'
-                            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                            }`}
-                    >
-                        <span className={isActive(item.path) ? 'text-teal-600' : 'text-gray-400'}>
-                            {item.icon}
-                        </span>
-                        <span>{item.label}</span>
-                    </Link>
-                ))}
-            </nav>
+            {/* Mobile Menu Overlay */}
+            {isMobileMenuOpen && (
+                <div
+                    className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                />
+            )}
 
-            {/* Bottom Section */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50">
-                <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center text-white text-xs font-semibold">
-                        AU
-                    </div>
-                    <div className="text-xs">
-                        <div className="font-semibold text-gray-900">ABHISHEK UMTEKAR</div>
-                        <div className="text-gray-500">Valid till Oct 19, 2025</div>
+            {/* Sidebar */}
+            <div className={`
+                fixed top-0 left-0 h-full bg-white border-r border-gray-200 z-50 transition-transform duration-300 ease-in-out
+                w-64 lg:w-52
+                ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+            `}>
+                {/* Logo */}
+                <div className="p-6 border-b border-gray-200">
+                    <h1 className="text-xl font-bold">
+                        <span className="text-teal-600">capital</span>
+                        <span className="text-gray-900">mind</span>
+                    </h1>
+                    <span className="inline-block mt-1 px-2 py-0.5 bg-gray-900 text-white text-xs font-semibold rounded">
+                        premium
+                    </span>
+                </div>
+
+                {/* Navigation */}
+                <nav className="py-4 overflow-y-auto pb-24" style={{ maxHeight: 'calc(100vh - 160px)' }}>
+                    {menuItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={handleLinkClick}
+                            className={`flex items-center space-x-3 px-6 py-3 text-sm font-medium transition-colors ${isActive(item.path)
+                                ? 'bg-gray-100 text-gray-900 border-r-2 border-teal-600'
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                }`}
+                        >
+                            <span className={isActive(item.path) ? 'text-teal-600' : 'text-gray-400'}>
+                                {item.icon}
+                            </span>
+                            <span>{item.label}</span>
+                        </Link>
+                    ))}
+                </nav>
+
+                {/* Bottom Section */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50">
+                    <div className="flex items-center space-x-2">
+                        <div className="w-8 h-8 bg-teal-600 rounded-full flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                            AU
+                        </div>
+                        <div className="text-xs overflow-hidden">
+                            <div className="font-semibold text-gray-900 truncate">ABHISHEK UMTEKAR</div>
+                            <div className="text-gray-500 truncate">Valid till Oct 19, 2025</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

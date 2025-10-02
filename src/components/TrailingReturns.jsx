@@ -23,16 +23,15 @@ const TrailingReturns = ({ returns }) => {
         { key: 'SI', label: 'SI' },
     ];
 
-    // Additional metrics for display
     const additionalMetrics = [
         { key: 'DD', label: 'DD' },
         { key: 'MAXDD', label: 'MAXDD' }
     ];
 
     return (
-        <div className="bg-white rounded-lg border border-gray-200 shadow-sm mb-6">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                <h2 className="text-xl font-semibold text-gray-900">Trailing Returns</h2>
+        <div className="bg-white rounded-lg border border-gray-200 shadow-sm mb-4 sm:mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 sm:p-6 border-b border-gray-200 gap-3 sm:gap-0">
+                <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Trailing Returns</h2>
                 <button className="text-teal-600 hover:text-teal-700">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -40,7 +39,8 @@ const TrailingReturns = ({ returns }) => {
                 </button>
             </div>
 
-            <div className="overflow-x-auto">
+            {/* Desktop Table */}
+            <div className="hidden lg:block overflow-x-auto">
                 <table className="min-w-full">
                     <thead>
                         <tr className="bg-gray-50 border-b border-gray-200">
@@ -97,7 +97,55 @@ const TrailingReturns = ({ returns }) => {
                     </tbody>
                 </table>
             </div>
-            <div className="px-6 py-3 bg-gray-50 border-t border-gray-200">
+
+            {/* Mobile/Tablet Card View */}
+            <div className="lg:hidden p-4 space-y-4">
+                {/* Focused Portfolio */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-900 mb-3">Focused</h3>
+                    <div className="grid grid-cols-3 gap-3">
+                        {[...metrics, ...additionalMetrics].map(metric => (
+                            <div key={metric.key} className="text-center">
+                                <div className="text-xs text-gray-500 uppercase mb-1">{metric.label}</div>
+                                <div className={`text-sm font-medium ${metric.key === 'DD' || metric.key === 'MAXDD'
+                                        ? 'text-red-600'
+                                        : getColorClass(returns[metric.key])
+                                    }`}>
+                                    {metric.key === 'DD' ? '-2.8%' :
+                                        metric.key === 'MAXDD' ? '-40.3%' :
+                                            formatReturn(returns[metric.key])}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* NIFTY50 Portfolio */}
+                <div className="bg-white rounded-lg p-4 border border-gray-200">
+                    <h3 className="font-semibold text-gray-900 mb-3">NIFTY50</h3>
+                    <div className="grid grid-cols-3 gap-3">
+                        {[...metrics, ...additionalMetrics].map(metric => (
+                            <div key={metric.key} className="text-center">
+                                <div className="text-xs text-gray-500 uppercase mb-1">{metric.label}</div>
+                                <div className="text-sm font-medium text-green-600">
+                                    {metric.key === 'YTD' ? '3.1%' :
+                                        metric.key === '1D' ? '0.1%' :
+                                            metric.key === '1W' ? '1.1%' :
+                                                metric.key === '1M' ? '1.4%' :
+                                                    metric.key === '3M' ? '4.4%' :
+                                                        metric.key === '6M' ? '16.2%' :
+                                                            metric.key === '1Y' ? '26.2%' :
+                                                                metric.key === '3Y' ? '16.0%' :
+                                                                    metric.key === 'SI' ? '14.5%' :
+                                                                        metric.key === 'DD' ? '-1.5%' : '-38.4%'}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+
+            <div className="px-4 sm:px-6 py-3 bg-gray-50 border-t border-gray-200">
                 <p className="text-xs text-gray-500">Note: Returns above 1 year are annualised.</p>
             </div>
         </div>

@@ -8,12 +8,11 @@ const EquityCurve = ({ equityData, drawdownData }) => {
         to: equityData[equityData.length - 1]?.date || new Date()
     });
 
-    // Filter data based on date range
     const filteredData = equityData
         .map((item, index) => ({
             date: item.date.getTime(),
             equity: item.value,
-            nifty: item.value * 0.85, // Mock NIFTY50 data
+            nifty: item.value * 0.85,
             drawdown: drawdownData[index]?.drawdown || 0,
             dateLabel: format(item.date, 'yyyy-MM-dd')
         }))
@@ -22,13 +21,13 @@ const EquityCurve = ({ equityData, drawdownData }) => {
     const CustomTooltip = ({ active, payload }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-white p-3 border rounded shadow-lg">
-                    <p className="text-sm font-medium mb-1">{payload[0].payload.dateLabel}</p>
-                    <p className="text-sm text-green-600">
+                <div className="bg-white p-2 sm:p-3 border rounded shadow-lg">
+                    <p className="text-xs sm:text-sm font-medium mb-1">{payload[0].payload.dateLabel}</p>
+                    <p className="text-xs sm:text-sm text-green-600">
                         Focused: {payload[0].value.toFixed(2)}
                     </p>
                     {payload[1] && (
-                        <p className="text-sm text-blue-600">
+                        <p className="text-xs sm:text-sm text-blue-600">
                             NIFTY50: {payload[1].value.toFixed(2)}
                         </p>
                     )}
@@ -38,7 +37,6 @@ const EquityCurve = ({ equityData, drawdownData }) => {
         return null;
     };
 
-    // Reset date range to default
     const handleReset = () => {
         setDateRange({
             from: equityData[0]?.date || new Date(),
@@ -48,10 +46,11 @@ const EquityCurve = ({ equityData, drawdownData }) => {
 
     return (
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
-            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center p-4 sm:p-6 border-b border-gray-200 gap-4">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900">Equity curve</h2>
-                    <p className="text-sm text-gray-500 mt-1">Live since 2019-01-01
+                    <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Equity curve</h2>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                        Live since 2019-01-01
                         <button
                             className="ml-2 text-teal-600 hover:text-teal-700 text-xs"
                             onClick={handleReset}
@@ -60,21 +59,21 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                         </button>
                     </p>
                 </div>
-                <div className="flex space-x-4 text-sm">
-                    <div className="flex items-center space-x-2">
-                        <span className="text-gray-600">From date</span>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 text-sm w-full lg:w-auto">
+                    <div className="flex items-center gap-2">
+                        <span className="text-gray-600 text-xs sm:text-sm whitespace-nowrap">From date</span>
                         <input
                             type="date"
-                            className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                            className="border border-gray-300 rounded px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 flex-1 sm:flex-none"
                             value={format(dateRange.from, 'yyyy-MM-dd')}
                             onChange={(e) => setDateRange({ ...dateRange, from: new Date(e.target.value) })}
                         />
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <span className="text-gray-600">To date</span>
+                    <div className="flex items-center gap-2">
+                        <span className="text-gray-600 text-xs sm:text-sm whitespace-nowrap">To date</span>
                         <input
                             type="date"
-                            className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+                            className="border border-gray-300 rounded px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 flex-1 sm:flex-none"
                             value={format(dateRange.to, 'yyyy-MM-dd')}
                             onChange={(e) => setDateRange({ ...dateRange, to: new Date(e.target.value) })}
                         />
@@ -82,8 +81,8 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                 </div>
             </div>
 
-            <div className="p-6">
-                <ResponsiveContainer width="100%" height={450}>
+            <div className="p-2 sm:p-4 lg:p-6">
+                <ResponsiveContainer width="100%" height={300} className="sm:h-[350px] lg:h-[450px]">
                     <ComposedChart data={filteredData}>
                         <defs>
                             <linearGradient id="colorDrawdown" x1="0" y1="0" x2="0" y2="1">
@@ -98,18 +97,19 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                             domain={['dataMin', 'dataMax']}
                             tickFormatter={(timestamp) => format(new Date(timestamp), 'MMM yy')}
                             stroke="#999"
-                            tick={{ fontSize: 12 }}
+                            tick={{ fontSize: 10 }}
+                            className="sm:text-xs"
                         />
                         <YAxis
                             yAxisId="left"
                             stroke="#999"
-                            tick={{ fontSize: 12 }}
-                            domain={[-80, 600]}
-                            ticks={[-50, -20, 0, 50, 100, 200, 300, 400, 550]}
+                            tick={{ fontSize: 10 }}
+                            className="sm:text-xs"
+                            domain={[-80, 550]}
+                            ticks={[-50, 0, 50, 100, 200, 300, 400, 550]}
                         />
                         <Tooltip content={<CustomTooltip />} />
                         <ReferenceLine y={-50} stroke="#000" strokeDasharray="3 3" isFront={false} />
-                        <ReferenceLine y={-20} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={0} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={50} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={100} stroke="#000" strokeDasharray="3 3" isFront={false} />
@@ -133,7 +133,7 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                             type="monotone"
                             dataKey="equity"
                             stroke="#10b981"
-                            strokeWidth={2.5}
+                            strokeWidth={2}
                             dot={false}
                             name="Focused"
                         />
@@ -142,7 +142,7 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                             type="monotone"
                             dataKey="nifty"
                             stroke="#3b82f6"
-                            strokeWidth={2.5}
+                            strokeWidth={2}
                             dot={false}
                             name="NIFTY50"
                         />
