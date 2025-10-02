@@ -104,20 +104,19 @@ const EquityCurve = ({ equityData, drawdownData }) => {
                             yAxisId="left"
                             stroke="#999"
                             tick={{ fontSize: 12 }}
-                            domain={[-100, 400]}
-                            ticks={[-100, -50, -20, 0, 50, 100, 150, 250, 400]}
+                            domain={[-80, 600]}
+                            ticks={[-50, -20, 0, 50, 100, 200, 300, 400, 550]}
                         />
                         <Tooltip content={<CustomTooltip />} />
-
-                        <ReferenceLine y={-100} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={-50} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={-20} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={0} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={50} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={100} stroke="#000" strokeDasharray="3 3" isFront={false} />
-                        <ReferenceLine y={150} stroke="#000" strokeDasharray="3 3" isFront={false} />
-                        <ReferenceLine y={250} stroke="#000" strokeDasharray="3 3" isFront={false} />
+                        <ReferenceLine y={200} stroke="#000" strokeDasharray="3 3" isFront={false} />
+                        <ReferenceLine y={300} stroke="#000" strokeDasharray="3 3" isFront={false} />
                         <ReferenceLine y={400} stroke="#000" strokeDasharray="3 3" isFront={false} />
+                        <ReferenceLine y={550} stroke="#000" strokeDasharray="3 3" isFront={false} />
 
                         <Area
                             yAxisId="left"
